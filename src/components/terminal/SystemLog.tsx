@@ -38,9 +38,15 @@ const SystemLog = () => {
   }, [logs]);
 
   return (
-    <div className="terminal-box p-3 pt-5 relative">
-      <span className="terminal-box-label">SYSTEM LOG</span>
-      <div ref={ref} className="overflow-auto max-h-[120px]">
+    <div className="border border-primary/30 bg-card rounded-sm border-glow relative scanline flex flex-col">
+      <div className="flex items-center justify-between p-3 pb-1">
+        <span className="text-[10px] text-muted-foreground tracking-widest">▸ SYSTEM LOG</span>
+        <div className="flex items-center gap-1.5">
+          <span className="w-1.5 h-1.5 rounded-full bg-terminal-green animate-pulse-dot" />
+          <span className="text-[10px] text-terminal-green">LIVE</span>
+        </div>
+      </div>
+      <div ref={ref} className="overflow-auto flex-1 px-3 pb-2 max-h-[200px]">
         {logs.map(log => (
           <div key={log.id} className="text-[11px] leading-5 flex gap-2">
             <span className="text-muted-foreground shrink-0">{log.time}</span>

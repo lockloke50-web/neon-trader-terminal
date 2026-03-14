@@ -16,33 +16,39 @@ const Index = () => {
       <TerminalHeader />
 
       <div className="flex-1 p-3 space-y-3 overflow-auto">
-        {/* Wallet + Stats combined row */}
-        <div className="terminal-box p-3 pt-5 relative">
-          <div className="absolute top-[-0.6em] left-3 bg-background px-1">
-            <span className="text-[11px] text-primary">WALLET</span>
-            <span className="text-[11px] text-muted-foreground mx-4">│</span>
-            <span className="text-[11px] text-primary">STATISTICS</span>
-          </div>
-          <div className="flex flex-col md:flex-row gap-4 md:gap-8">
-            <WalletModule />
-            <StatsModule />
-          </div>
+        {/* Top Row: 3-column grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <WalletModule />
+          <StatsModule />
+          <EquitySparkline highlightIndex={hoveredTrade} />
         </div>
 
-        {/* Trade History */}
-        <TradeHistory onHoverTrade={setHoveredTrade} />
+        {/* Middle Row: Trade History + System Log */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3" style={{ minHeight: '220px' }}>
+          <TradeHistory onHoverTrade={setHoveredTrade} />
+          <SystemLog />
+        </div>
 
-        {/* Equity Performance */}
-        <EquitySparkline highlightIndex={hoveredTrade} />
+        {/* Bottom: Active Positions */}
+        <div>
+          <div className="text-[10px] text-muted-foreground tracking-widest mb-2 px-1">
+            ▸ ACTIVE POSITIONS ({positions.length})
+          </div>
+          <div className="space-y-3">
+            {positions.map(pos => (
+              <PositionCard key={pos.id} position={pos} />
+            ))}
+          </div>
+        </div>
+      </div>
 
-        {/* System Log */}
-        <SystemLog />
-
-        {/* Active Positions */}
-        <div className="space-y-3">
-          {positions.map(pos => (
-            <PositionCard key={pos.id} position={pos} />
-          ))}
+      {/* Footer */}
+      <div className="border-t border-primary/20 px-4 py-1.5 flex items-center justify-between text-[10px] text-muted-foreground">
+        <span>QUANT_ENGINE :: ALPHA_BUILD</span>
+        <div className="flex items-center gap-3">
+          <span>LATENCY: 12ms</span>
+          <span>MEM: 847MB</span>
+          <span className="text-terminal-green">● OPERATIONAL</span>
         </div>
       </div>
     </div>

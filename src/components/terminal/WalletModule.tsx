@@ -2,29 +2,33 @@ import { wallet } from '@/lib/mockData';
 
 const WalletModule = () => {
   return (
-    <div className="flex-1">
-      <div className="text-[11px] leading-relaxed">
-        <div className="flex gap-2">
-          <span className="text-muted-foreground">Available$</span>
-          <span className="text-secondary-foreground">{wallet.available_usdt.toFixed(2)} USDT</span>
-        </div>
-        <div className="flex gap-2">
-          <span className="text-muted-foreground">Locked   $</span>
-          <span className="text-secondary-foreground">{wallet.locked_usdt.toFixed(2)} USDT</span>
-        </div>
-        <div className="flex gap-2">
-          <span className="text-muted-foreground">uPnL</span>
-          <span className={wallet.unrealized_pnl >= 0 ? 'text-terminal-green' : 'text-terminal-red'}>
-            {wallet.unrealized_pnl >= 0 ? '+' : ''}{wallet.unrealized_pnl.toFixed(4)} USDT
-          </span>
-        </div>
-        <div className="flex gap-2">
-          <span className="text-muted-foreground">Equity   $</span>
-          <span className="text-secondary-foreground">{wallet.total_equity.toFixed(2)} USDT</span>
-        </div>
+    <div className="border border-primary/30 bg-card p-3 rounded-sm border-glow relative scanline">
+      <div className="text-[10px] text-muted-foreground mb-2 tracking-widest">▸ WALLET</div>
+      <div className="space-y-1.5">
+        <Row label="Total Equity" value={`$${wallet.total_equity.toLocaleString()}`} accent />
+        <Row label="Available" value={`$${wallet.available_usdt.toLocaleString()}`} />
+        <Row label="Locked" value={`$${wallet.locked_usdt.toLocaleString()}`} />
+        <Row
+          label="Unrealized PnL"
+          value={`${wallet.unrealized_pnl >= 0 ? '+' : ''}$${wallet.unrealized_pnl.toLocaleString()}`}
+          positive={wallet.unrealized_pnl >= 0}
+        />
       </div>
     </div>
   );
 };
+
+const Row = ({ label, value, accent, positive }: { label: string; value: string; accent?: boolean; positive?: boolean }) => (
+  <div className="flex justify-between text-xs">
+    <span className="text-muted-foreground">{label}</span>
+    <span className={
+      accent ? 'text-primary glow-cyan font-semibold' :
+      positive !== undefined ? (positive ? 'text-terminal-green glow-green' : 'text-terminal-red glow-red') :
+      'text-secondary-foreground'
+    }>
+      {value}
+    </span>
+  </div>
+);
 
 export default WalletModule;
