@@ -1,43 +1,36 @@
 import { equityHistory } from '@/lib/mockData';
-import { Area, AreaChart, ResponsiveContainer, YAxis } from 'recharts';
+import { Bar, BarChart, ResponsiveContainer, YAxis } from 'recharts';
 
 interface EquitySparklineProps {
   highlightIndex?: number | null;
 }
 
 const EquitySparkline = ({ highlightIndex }: EquitySparklineProps) => {
-  const data = highlightIndex !== null && highlightIndex !== undefined
-    ? equityHistory.map((d, i) => ({ ...d, highlight: i === highlightIndex ? d.equity : undefined }))
-    : equityHistory;
+  // Transform to delta-based bars for a bar chart look
+  const baseEquity = equityHistory[0].equity;
+  const data = equityHistory.map((d, i) => ({
+    ...d,
+    delta: d.equity - baseEquity,
+    fill: highlightIndex === i ? 'hsl(180, 100%, 50%)' : 'hsl(145, 100%, 64%)',
+  }));
 
   return (
-    <div className="border border-primary/30 bg-card p-3 rounded-sm border-glow relative scanline">
-      <div className="flex justify-between items-center mb-2">
-        <span className="text-[10px] text-muted-foreground tracking-widest">▸ EQUITY CURVE</span>
-        <span className="text-xs text-terminal-green glow-green">
-          +{((equityHistory[equityHistory.length - 1].equity - equityHistory[0].equity) / equityHistory[0].equity * 100).toFixed(2)}%
-        </span>
-      </div>
-      <div className="h-[72px]">
+    <div className="terminal-box p-3 pt-5 relative">
+      <span className="terminal-box-label">EQUITY PERFORMANCE</span>
+      <div className="h-[60px]">
         <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={data} margin={{ top: 2, right: 2, left: 2, bottom: 2 }}>
-            <defs>
-              <linearGradient id="eqGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="hsl(180, 100%, 50%)" stopOpacity={0.3} />
-                <stop offset="100%" stopColor="hsl(180, 100%, 50%)" stopOpacity={0} />
-              </linearGradient>
-            </defs>
-            <YAxis domain={['dataMin - 100', 'dataMax + 100']} hide />
-            <Area
-              type="monotone"
-              dataKey="equity"
-              stroke="hsl(180, 100%, 50%)"
-              strokeWidth={1.5}
-              fill="url(#eqGradient)"
-              dot={false}
+          <BarChart data={data} margin={{ top: 2, right: 2, left: 2, bottom: 2 }}>
+            <YAxis domain={['dataMin', 'dataMax']} hide />
+            <Bar
+              dataKey="delta"
               isAnimationActive={false}
-            />
-          </AreaChart>
+              radius={0}
+            >
+              {data.map((entry, index) => (
+                <rect key={index} fill={entry.fill} />
+              ))}
+            </Bar>
+          </BarChart>
         </ResponsiveContainer>
       </div>
     </div>

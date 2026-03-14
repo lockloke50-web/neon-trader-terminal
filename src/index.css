@@ -9,7 +9,7 @@
     --background: 0 0% 5%;
     --foreground: 180 100% 50%;
 
-    --card: 0 0% 7%;
+    --card: 0 0% 6%;
     --card-foreground: 180 100% 50%;
 
     --popover: 0 0% 7%;
@@ -34,7 +34,7 @@
     --input: 0 0% 15%;
     --ring: 180 100% 50%;
 
-    --radius: 0.25rem;
+    --radius: 0rem;
 
     --terminal-green: 145 100% 64%;
     --terminal-red: 0 100% 67%;
@@ -73,36 +73,24 @@
   .glow-red {
     text-shadow: 0 0 8px hsl(0 100% 67% / 0.6);
   }
-  .border-glow {
-    box-shadow: 0 0 6px hsl(180 100% 50% / 0.15), inset 0 0 6px hsl(180 100% 50% / 0.05);
+  .terminal-box {
+    border: 1px dashed hsl(180 100% 50% / 0.4);
+    background: hsl(0 0% 5%);
+    position: relative;
   }
-  .scanline::after {
-    content: '';
+  .terminal-box-label {
     position: absolute;
-    inset: 0;
-    background: repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 2px,
-      hsl(180 100% 50% / 0.03) 2px,
-      hsl(180 100% 50% / 0.03) 4px
-    );
-    pointer-events: none;
+    top: -0.6em;
+    left: 0.75em;
+    background: hsl(0 0% 5%);
+    padding: 0 0.4em;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    color: hsl(180 100% 50%);
   }
 }
 
 @keyframes pulse-dot {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.3; }
-}
-
-@keyframes scroll-log {
-  from { transform: translateY(0); }
-  to { transform: translateY(-20px); }
-}
-
-@keyframes slide-price {
-  0% { left: 40%; }
-  50% { left: 55%; }
-  100% { left: 45%; }
 }
